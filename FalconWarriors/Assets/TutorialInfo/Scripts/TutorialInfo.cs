@@ -29,13 +29,9 @@ public class TutorialInfo : MonoBehaviour
 	void Awake()
 	{
 		// Check player prefs for show at start preference
-		if (PlayerPrefs.HasKey(showAtStartPrefsKey))
-		{
-			showAtStart = PlayerPrefs.GetInt(showAtStartPrefsKey) == 1
-		}
 
-		// set UI toggle to match the existing UI preference
-		showAtStartToggle.isOn = showAtStart;
+
+		showAtStart = true;
 
 		// show the overlay info or continue to play the game
 		if (showAtStart) 
