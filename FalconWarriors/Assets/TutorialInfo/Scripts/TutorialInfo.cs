@@ -31,7 +31,7 @@ public class TutorialInfo : MonoBehaviour
 		// Check player prefs for show at start preference
 		if (PlayerPrefs.HasKey(showAtStartPrefsKey))
 		{
-			showAtStart = PlayerPrefs.GetInt(showAtStartPrefsKey) == 1;
+			showAtStart = PlayerPrefs.GetInt(showAtStartPrefsKey) == 1
 		}
 
 		// set UI toggle to match the existing UI preference
