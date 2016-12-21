@@ -29,10 +29,7 @@ public class TutorialInfo : MonoBehaviour
 	void Awake()
 	{
 		// Check player prefs for show at start preference
-
-
-		showAtStart = true;
-
+        
 		// show the overlay info or continue to play the game
 		if (showAtStart) 
 		{

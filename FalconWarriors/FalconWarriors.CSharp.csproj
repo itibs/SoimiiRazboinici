@@ -66,7 +66,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\RotateAsteroid.cs" />
     <Compile Include="Assets\TutorialInfo\Scripts\TutorialInfo.cs" />
+    <Compile Include="Assets\TypeScript.cs" />
     <Compile Include="Assets\_Completed-Assets\Scripts\Done_BGScroller.cs" />
     <Compile Include="Assets\_Completed-Assets\Scripts\Done_DestroyByBoundary.cs" />
     <Compile Include="Assets\_Completed-Assets\Scripts\Done_DestroyByContact.cs" />

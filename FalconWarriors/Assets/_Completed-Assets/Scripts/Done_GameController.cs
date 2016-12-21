@@ -1,33 +1,40 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Done_GameController : MonoBehaviour
 {
-	public GameObject[] hazards;
-	public Vector3 spawnValues;
-	public int hazardCount;
-	public float spawnWait;
-	public float startWait;
-	public float waveWait;
-	
-	public GUIText scoreText;
-	public GUIText restartText;
-	public GUIText gameOverText;
-	
-	private bool gameOver;
-	private bool restart;
-	private int score;
-	
-	void Start ()
+    public GameObject[] hazards;
+    public Vector3 spawnValues;
+    public GameObject playerExplosion;
+    public GameObject player;
+    public int hazardCount;
+    public float spawnWait;
+    public float startWait;
+    public float waveWait;
+
+    public GUIText scoreText;
+    public GUIText livesText;
+    public GUIText restartText;
+    public GUIText gameOverText;
+
+    private bool gameOver;
+    private bool restart;
+    private int score;
+    private int lives;
+
+    void Start ()
 	{
-		gameOver = false;
-		restart = false;
-		restartText.text = "";
-		gameOverText.text = "";
-		score = 0;
-		UpdateScore ();
-		StartCoroutine (SpawnWaves ());
-	}
+        gameOver = false;
+        restart = false;
+        restartText.text = "";
+        gameOverText.text = "";
+        score = 0;
+        lives = 3;
+        UpdateScore();
+        UpdateLives();
+        StartCoroutine(SpawnWaves());
+    }
 	
 	void Update ()
 	{
@@ -35,7 +42,7 @@ public class Done_GameController : MonoBehaviour
 		{
 			if (Input.GetKeyDown (KeyCode.R))
 			{
-				Application.LoadLevel (Application.loadedLevel);
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 			}
 		}
 	}
@@ -70,13 +77,34 @@ public class Done_GameController : MonoBehaviour
 		score += newScoreValue;
 		UpdateScore ();
 	}
-	
-	void UpdateScore ()
+
+    public void SubtractLives(int livesTaken)
+    {
+        lives -= livesTaken;
+
+        UpdateLives();
+    }
+
+    void UpdateScore ()
 	{
 		scoreText.text = "Score: " + score + " \nPress space for The Killing Joke";
 	}
-	
-	public void GameOver ()
+
+    void UpdateLives()
+    {
+        if (gameOver)
+        {
+            return;
+        }
+        livesText.text = "Lives: " + lives;
+        if (lives < 1)
+        {
+            Instantiate(playerExplosion, player.transform.position, player.transform.rotation);
+            GameOver();
+        }
+    }
+
+    public void GameOver ()
 	{
 		gameOverText.text = "Game Over!";
 		gameOver = true;
