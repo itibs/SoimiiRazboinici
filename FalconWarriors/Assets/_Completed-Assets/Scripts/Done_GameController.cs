@@ -8,6 +8,10 @@ public class Done_GameController : MonoBehaviour
     public Vector3 spawnValues;
     public GameObject playerExplosion;
     public GameObject player;
+
+    public ArrayList crtHazards;
+    public GameObject activeHazard;
+
     public int hazardCount;
     public float spawnWait;
     public float startWait;
@@ -29,6 +33,8 @@ public class Done_GameController : MonoBehaviour
         restart = false;
         restartText.text = "";
         gameOverText.text = "";
+        activeHazard = null;
+        crtHazards = new ArrayList();
         score = 0;
         lives = 3;
         UpdateScore();
@@ -38,6 +44,22 @@ public class Done_GameController : MonoBehaviour
 	
 	void Update ()
 	{
+        while (crtHazards.Count > 0)
+        {
+            if (crtHazards[0].Equals(null))
+            {
+                crtHazards.RemoveAt(0);
+            } else
+            {
+                activeHazard = (GameObject)crtHazards[0];
+                activeHazard.GetComponentInChildren<TypeScript>().setActive(true);
+                break;
+            }
+        }
+        if (crtHazards.Count == 0)
+        {
+            activeHazard = null;
+        }
 		if (restart)
 		{
 			if (Input.GetKeyDown (KeyCode.R))
@@ -57,7 +79,8 @@ public class Done_GameController : MonoBehaviour
 				GameObject hazard = hazards [Random.Range (0, hazards.Length)];
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
-				Instantiate (hazard, spawnPosition, spawnRotation);
+				hazard = (GameObject) Instantiate (hazard, spawnPosition, spawnRotation);
+                crtHazards.Add(hazard);
 				yield return new WaitForSeconds (spawnWait);
 			}
 			yield return new WaitForSeconds (waveWait);
@@ -106,6 +129,7 @@ public class Done_GameController : MonoBehaviour
 
     public void GameOver ()
 	{
+        Destroy(player);
 		gameOverText.text = "Game Over!";
 		gameOver = true;
 	}

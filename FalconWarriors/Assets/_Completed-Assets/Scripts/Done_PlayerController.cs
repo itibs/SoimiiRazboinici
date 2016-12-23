@@ -14,7 +14,11 @@ public class Done_PlayerController : MonoBehaviour
 	public float tilt;
 	public Done_Boundary boundary;
 
-	public GameObject shot;
+    public Done_GameController controller;
+
+    public GUIText debugText;
+
+    public GameObject shot;
 	public Transform shotSpawn;
 	public float fireRate;
 	 
@@ -32,13 +36,28 @@ public class Done_PlayerController : MonoBehaviour
 	void Update ()
 	{
 		
+        if (controller.activeHazard != null)
+        {
+            Vector3 dir = controller.activeHazard.transform.position - transform.position;
+            transform.rotation = Quaternion.LookRotation(dir, new Vector3(0, 1));
+        } else
+        {
+            transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, 1), new Vector3(0, 1));
+        }
+
 		var i=0;
 		for(i=0;i<check_for_char.Length;i++)
 			if ((Input.GetKeyDown(check_for_char[i].ToString()) && Time.time > nextFire)) 
 			{
-			nextFire = Time.time + fireRate;
-			Instantiate(shot, shotSpawn.position, Quaternion.Euler(line));
-			GetComponent<AudioSource>().Play ();
+                GameObject activeHazard = controller.activeHazard;
+                if (activeHazard != null)
+                {
+                    debugText.text = controller.activeHazard.transform.position.ToString() + " " + controller.crtHazards.Count.ToString();
+                    nextFire = Time.time + fireRate;
+                    shot.GetComponent<Done_Mover>().target = activeHazard;
+                    Instantiate(shot, shotSpawn.position, Quaternion.Euler(line));
+                    GetComponent<AudioSource>().Play();
+                }
 			}
 
 

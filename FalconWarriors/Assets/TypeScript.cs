@@ -21,13 +21,18 @@ public class TypeScript : MonoBehaviour {
         if (c >= 'a' && c <= 'z') return Input.GetKeyDown(KeyCode.A + c - 'a');
         return false;
     }
+
+    public bool isDone()
+    {
+        return textMesh.text.Length <= 0;
+    }
 	
 	// Update is called once per frame
 	void Update () {
-        if (!isActive)
-        {
-            setActive(true);
-        }
+        //if (!isActive)
+        //{
+        //    setActive(true);
+        //}
 
         if (isActive == false)
         {
@@ -51,8 +56,8 @@ public class TypeScript : MonoBehaviour {
             textMesh.color = Color.yellow;
         } else
         {
+            textMesh.text = orig_text;
             textMesh.color = Color.white;
         }
-        textMesh.text = orig_text;
     }
 }

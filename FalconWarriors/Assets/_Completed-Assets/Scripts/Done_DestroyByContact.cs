@@ -6,7 +6,6 @@ public class Done_DestroyByContact : MonoBehaviour
     public GameObject explosion;
     public int scoreValue;
     private Done_GameController gameController;
-    public int lives = 3;
 
     void Start()
     {
@@ -23,10 +22,35 @@ public class Done_DestroyByContact : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log(lives);
         if ((other.tag == "Boundary" || other.tag == "Enemy") && other.tag != "Player")
         {
             return;
+        }
+
+        if (other.tag == "BottomBoundary")
+        {
+            Debug.Log("here");
+            Destroy(gameObject);
+            //Instantiate(explosion, transform.position, transform.rotation);
+            return;
+        }
+
+        if (other.tag == "Bolt")
+        {
+            Done_Mover bolt = (Done_Mover)other.GetComponent<Done_Mover>();
+            if (gameObject == bolt.target)
+            {
+                Destroy(other.gameObject);
+                if (GetComponentInChildren<TypeScript>().isDone())
+                {
+                    Destroy(gameObject);
+                    Instantiate(explosion, transform.position, transform.rotation);
+                }
+                return;
+            } else
+            {
+                return;
+            }
         }
 
         if (explosion != null)
