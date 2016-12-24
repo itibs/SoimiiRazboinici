@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System.IO;
 
 public class Done_GameController : MonoBehaviour
 {
@@ -16,6 +18,7 @@ public class Done_GameController : MonoBehaviour
     public float spawnWait;
     public float startWait;
     public float waveWait;
+    public int waveNo;
 
     public GUIText scoreText;
     public GUIText livesText;
@@ -27,8 +30,12 @@ public class Done_GameController : MonoBehaviour
     private int score;
     private int lives;
 
+    public Dictionary<int, List<string>> words;
+
     void Start ()
 	{
+        initializeWords();
+        waveNo = 0;
         gameOver = false;
         restart = false;
         restartText.text = "";
@@ -51,14 +58,58 @@ public class Done_GameController : MonoBehaviour
                 crtHazards.RemoveAt(0);
             } else
             {
-                activeHazard = (GameObject)crtHazards[0];
-                activeHazard.GetComponentInChildren<TypeScript>().setActive(true);
+                //activeHazard = (GameObject)crtHazards[0];
+                //TypeScript typeScript = activeHazard.GetComponentInChildren<TypeScript>();
+                //typeScript.setActive(true);
                 break;
             }
         }
         if (crtHazards.Count == 0)
         {
             activeHazard = null;
+        }
+
+        if (activeHazard == null || activeHazard.Equals(null)
+            || activeHazard.GetComponentInChildren<TypeScript>().isDone()) // if no active hazard
+        {
+            for (char c = 'a'; c <= 'z'; c++) // see if a key is pressed
+            {
+                if (Input.GetKeyDown(c.ToString()))
+                {
+                    // and find if there is an asteroid which starts with that letter
+                    for (int i = 0; i < crtHazards.Count; ++i)
+                    {
+                        GameObject hazard = (GameObject)crtHazards[i];
+                        if (hazard.Equals(null))
+                        {
+                            continue; // skip destroyed asteroids
+                        }
+                        TypeScript typeScript = hazard.GetComponentInChildren<TypeScript>();
+                        if (typeScript.isDone())
+                        {
+                            continue;
+                        }
+                        if (typeScript.orig_text.Length > 0
+                            && char.ToLowerInvariant(typeScript.orig_text[0]) == c)
+                        {
+                            activeHazard = hazard;
+                            typeScript.setActive(true);
+                            Vector3 dir = activeHazard.transform.position - player.transform.position;
+                            player.transform.rotation = Quaternion.LookRotation(dir, new Vector3(0, 1));
+                            GameObject shot = player.GetComponent<Done_PlayerController>().shot;
+                            Transform shotSpawn = player.GetComponent<Done_PlayerController>().shotSpawn;
+                            shot.GetComponent<Done_Mover>().target = activeHazard;
+                            Instantiate(shot, shotSpawn.position, Quaternion.Euler(shotSpawn.rotation.eulerAngles));
+                            GetComponent<AudioSource>().Play();
+                            break;
+                        }
+                    }
+                    if (activeHazard != null && !activeHazard.Equals(null)) // found active hazard, exit loop
+                    {
+                        break;
+                    }
+                }
+            }
         }
 		if (restart)
 		{
@@ -72,14 +123,20 @@ public class Done_GameController : MonoBehaviour
 	IEnumerator SpawnWaves ()
 	{
 		yield return new WaitForSeconds (startWait);
+        
 		while (true)
 		{
-			for (int i = 0; i < hazardCount; i++)
+            waveNo += 1;
+            for (int i = 0; i < hazardCount; i++)
 			{
 				GameObject hazard = hazards [Random.Range (0, hazards.Length)];
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
 				hazard = (GameObject) Instantiate (hazard, spawnPosition, spawnRotation);
+                TypeScript typeScript = hazard.GetComponentInChildren<TypeScript>();
+                int wordLength = waveNo % 15 + 1;
+                int cnt = words[wordLength].Count;
+                typeScript.orig_text = words[wordLength][i % cnt];
                 crtHazards.Add(hazard);
 				yield return new WaitForSeconds (spawnWait);
 			}
@@ -94,6 +151,30 @@ public class Done_GameController : MonoBehaviour
 
 		}
 	}
+
+    private void initializeWords()
+    {
+        words = new Dictionary<int, List<string>>();
+        string line;
+        for (int i = 1; i <= 15; ++i)
+        {
+            words.Add(i, new List<string>());
+            StreamReader sr = new StreamReader("Assets/Files/" + i + ".txt");
+            using (sr)
+            {
+                do
+                {
+                    line = sr.ReadLine();
+                    if (line != null)
+                    {
+                        words[i].Add(line);
+                    }
+                } while (line != null);
+            }
+
+            sr.Close();
+        }
+    }
 	
 	public void AddScore (int newScoreValue)
 	{
@@ -110,7 +191,7 @@ public class Done_GameController : MonoBehaviour
 
     void UpdateScore ()
 	{
-		scoreText.text = "Score: " + score + " \nPress space for The Killing Joke";
+		scoreText.text = "Score: " + score;
 	}
 
     void UpdateLives()

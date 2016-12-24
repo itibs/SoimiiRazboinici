@@ -20,10 +20,6 @@ public class Done_PlayerController : MonoBehaviour
 
     public GameObject shot;
 	public Transform shotSpawn;
-	public float fireRate;
-	 
-	private float nextFire;
-	private string  check_for_char = "abcdefghikljmnopqrstuvwqyz";
 
 	private Vector3 line;
 
@@ -45,32 +41,28 @@ public class Done_PlayerController : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(new Vector3(0, 0, 1), new Vector3(0, 1));
         }
 
-		var i=0;
-		for(i=0;i<check_for_char.Length;i++)
-			if ((Input.GetKeyDown(check_for_char[i].ToString()) && Time.time > nextFire)) 
-			{
-                GameObject activeHazard = controller.activeHazard;
-                if (activeHazard != null)
-                {
-                    debugText.text = controller.activeHazard.transform.position.ToString() + " " + controller.crtHazards.Count.ToString();
-                    nextFire = Time.time + fireRate;
-                    shot.GetComponent<Done_Mover>().target = activeHazard;
-                    Instantiate(shot, shotSpawn.position, Quaternion.Euler(line));
-                    GetComponent<AudioSource>().Play();
-                }
-			}
+        GameObject activeHazard = controller.activeHazard;
+        if (activeHazard != null)
+        {
+            TypeScript typeScript = activeHazard.GetComponentInChildren<TypeScript>();
+            if (!typeScript.isDone() && Input.GetKeyDown(typeScript.textMesh.text[0].ToString()))
+            {
+                debugText.text = controller.activeHazard.transform.position.ToString() + " " + controller.crtHazards.Count.ToString();
+                shot.GetComponent<Done_Mover>().target = activeHazard;
+                Instantiate(shot, shotSpawn.position, Quaternion.Euler(line));
+                GetComponent<AudioSource>().Play();
+            }
+        }
 
-
-		//The Killing Joke
-		if (Input.GetButton("Killing_Joke"))
-		{
-			nextFire= Time.time + (float) 0.01; 
-			Vector3 rot = shotSpawn.rotation.eulerAngles;
-			rot = new Vector3(rot.x,(rot.y - Random.Range(-1,100))%100,rot.z);
-			shotSpawn.rotation=Quaternion.Euler(rot);
-			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
-			GetComponent<AudioSource>().Play ();
-		}
+		////The Killing Joke
+		//if (Input.GetButton("Killing_Joke"))
+		//{
+		//	Vector3 rot = shotSpawn.rotation.eulerAngles;
+		//	rot = new Vector3(rot.x,(rot.y - Random.Range(-1,100))%100,rot.z);
+		//	shotSpawn.rotation=Quaternion.Euler(rot);
+		//	Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+		//	GetComponent<AudioSource>().Play ();
+		//}
 
 	
 	}

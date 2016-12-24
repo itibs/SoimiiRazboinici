@@ -81,6 +81,22 @@
     <Compile Include="Assets\_Completed-Assets\Scripts\Done_WeaponController.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Files\1.txt" />
+    <None Include="Assets\Files\10.txt" />
+    <None Include="Assets\Files\11.txt" />
+    <None Include="Assets\Files\12.txt" />
+    <None Include="Assets\Files\13.txt" />
+    <None Include="Assets\Files\14.txt" />
+    <None Include="Assets\Files\15.txt" />
+    <None Include="Assets\Files\18.txt" />
+    <None Include="Assets\Files\2.txt" />
+    <None Include="Assets\Files\3.txt" />
+    <None Include="Assets\Files\4.txt" />
+    <None Include="Assets\Files\5.txt" />
+    <None Include="Assets\Files\6.txt" />
+    <None Include="Assets\Files\7.txt" />
+    <None Include="Assets\Files\8.txt" />
+    <None Include="Assets\Files\9.txt" />
     <None Include="Assets\TutorialInfo\Fonts\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

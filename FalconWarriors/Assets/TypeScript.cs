@@ -7,7 +7,7 @@ public class TypeScript : MonoBehaviour {
 
     public string orig_text;
 
-    private TextMesh textMesh;
+    public TextMesh textMesh;
 
 	// Use this for initialization
 	void Start () {
