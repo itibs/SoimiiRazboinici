@@ -43,6 +43,7 @@ public class Done_DestroyByContact : MonoBehaviour
                 Destroy(other.gameObject);
                 if (GetComponentInChildren<TypeScript>().isDone())
                 {
+                    gameController.AddScore(scoreValue);
                     Destroy(gameObject);
                     Instantiate(explosion, transform.position, transform.rotation);
                 }

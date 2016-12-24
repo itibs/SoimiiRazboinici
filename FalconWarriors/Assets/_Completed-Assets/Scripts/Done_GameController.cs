@@ -137,6 +137,7 @@ public class Done_GameController : MonoBehaviour
                 int wordLength = waveNo % 15 + 1;
                 int cnt = words[wordLength].Count;
                 typeScript.orig_text = words[wordLength][i % cnt];
+                hazard.GetComponent<Done_DestroyByContact>().scoreValue = 5 + wordLength * wordLength;
                 crtHazards.Add(hazard);
 				yield return new WaitForSeconds (spawnWait);
 			}
