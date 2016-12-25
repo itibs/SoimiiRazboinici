@@ -9,9 +9,13 @@ public class TypeScript : MonoBehaviour {
 
     public TextMesh textMesh;
 
+    void Awake()
+    {
+        textMesh = GetComponent<TextMesh>();
+    }
+
 	// Use this for initialization
 	void Start () {
-        textMesh = GetComponent<TextMesh>();
         textMesh.text = orig_text;
     }
 
@@ -25,6 +29,13 @@ public class TypeScript : MonoBehaviour {
     public bool isDone()
     {
         return textMesh.text.Length <= 0;
+    }
+
+    public void showMirror()
+    {
+        Vector3 crtScale = textMesh.transform.localScale;
+        crtScale.x = -0.1f;
+        textMesh.transform.localScale = crtScale;
     }
 	
 	// Update is called once per frame

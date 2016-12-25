@@ -19,6 +19,7 @@ public class Done_GameController : MonoBehaviour
     public float startWait;
     public float waveWait;
     public int waveNo;
+    public int maxWordLength;
 
     public GUIText scoreText;
     public GUIText livesText;
@@ -129,15 +130,27 @@ public class Done_GameController : MonoBehaviour
             waveNo += 1;
             for (int i = 0; i < hazardCount; i++)
 			{
+                // create asteroid
 				GameObject hazard = hazards [Random.Range (0, hazards.Length)];
 				Vector3 spawnPosition = new Vector3 (Random.Range (-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
 				Quaternion spawnRotation = Quaternion.identity;
 				hazard = (GameObject) Instantiate (hazard, spawnPosition, spawnRotation);
+
+                // set text
                 TypeScript typeScript = hazard.GetComponentInChildren<TypeScript>();
-                int wordLength = waveNo % 15 + 1;
+                int wordLength = (waveNo - 1) % maxWordLength + 2;
                 int cnt = words[wordLength].Count;
                 typeScript.orig_text = words[wordLength][i % cnt];
+
+                if (waveNo > maxWordLength)
+                {
+                    typeScript.showMirror();
+                }
+
+                // set score
                 hazard.GetComponent<Done_DestroyByContact>().scoreValue = 5 + wordLength * wordLength;
+
+                // add to list
                 crtHazards.Add(hazard);
 				yield return new WaitForSeconds (spawnWait);
 			}
