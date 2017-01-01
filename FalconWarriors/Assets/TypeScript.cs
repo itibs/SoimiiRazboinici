@@ -3,11 +3,16 @@ using System.Collections;
 
 public class TypeScript : MonoBehaviour {
 
-    private bool isActive = false;
+	private bool isActive = false;
 
     public string orig_text;
 
+	private int count;
+
+	private bool direction;
+
     public TextMesh textMesh;
+
 
     void Awake()
     {
@@ -17,6 +22,8 @@ public class TypeScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         textMesh.text = orig_text;
+		count = 0;
+		direction = true;
     }
 
     private bool letterPressed(char c)
@@ -44,7 +51,20 @@ public class TypeScript : MonoBehaviour {
         //{
         //    setActive(true);
         //}
+	
+		if (direction  && count<100)
+			count = count + 1;
+		if (count == 100)
+			direction = false;
+		if (!direction && count > 0)
+			count = count - 1;
+		if (count == 0)
+			direction = true;
+			
+		
 
+
+		textMesh.fontSize = count;
         if (isActive == false)
         {
             return;
