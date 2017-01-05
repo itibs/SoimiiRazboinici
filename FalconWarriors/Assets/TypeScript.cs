@@ -7,9 +7,9 @@ public class TypeScript : MonoBehaviour {
 
     public string orig_text;
 
-	private int count;
+	public int count;
 
-	private bool direction;
+	public bool direction;
 
     public TextMesh textMesh;
 
@@ -44,14 +44,9 @@ public class TypeScript : MonoBehaviour {
         crtScale.x = -0.1f;
         textMesh.transform.localScale = crtScale;
     }
-	
-	// Update is called once per frame
-	void Update () {
-        //if (!isActive)
-        //{
-        //    setActive(true);
-        //}
-	
+
+	public void ZoomInOut()
+	{
 		if (direction  && count<100)
 			count = count + 1;
 		if (count == 100)
@@ -60,11 +55,17 @@ public class TypeScript : MonoBehaviour {
 			count = count - 1;
 		if (count == 0)
 			direction = true;
-			
-		
-
-
 		textMesh.fontSize = count;
+	}
+	// Update is called once per frame
+	void Update () {
+        //if (!isActive)
+        //{
+        //    setActive(true);
+        //}
+	
+		ZoomInOut ();
+
         if (isActive == false)
         {
             return;

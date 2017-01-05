@@ -124,7 +124,7 @@ public class Done_GameController : MonoBehaviour
 	IEnumerator SpawnWaves ()
 	{
 		yield return new WaitForSeconds (startWait);
-        
+
 		while (true)
 		{
             waveNo += 1;
@@ -142,9 +142,12 @@ public class Done_GameController : MonoBehaviour
                 int cnt = words[wordLength].Count;
                 typeScript.orig_text = words[wordLength][i % cnt];
 
+
                 if (waveNo > maxWordLength)
                 {
+					//iterative application of animations on text
                     typeScript.showMirror();
+					typeScript.ZoomInOut ();
                 }
 
                 // set score
