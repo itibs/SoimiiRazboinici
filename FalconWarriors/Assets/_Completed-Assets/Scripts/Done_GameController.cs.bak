@@ -30,90 +30,8 @@ public class Done_GameController : MonoBehaviour
     private bool restart;
     private int score;
     private int lives;
-    public string username = "";
-    public int highScore = 0;
-    public string highScoreUser = "";
-    public string highScoreKey = "";
-    public string userHighScoreKey = "";
-    public bool showText = true;
-
-    int[] highScores = new int[5];
-    public int j;
 
     public Dictionary<int, List<string>> words;
-
-    void OnGUI()
-    {
-        if (restart)
-        {
-            if (showText)
-            {
-                GUI.Label(new Rect(Screen.width * .42f, Screen.height * .45f, Screen.width * .25f, 40), "Enter your username");
-                username = GUI.TextField(new Rect(Screen.width * .42f, Screen.height * .55f, Screen.width * .17f, 40), username, 25);
-
-                if (string.Equals("", username))
-                {
-                    GUI.enabled = false;
-                }
-                else
-                {
-                    GUI.enabled = true;
-                }
-
-                if (GUI.Button(new Rect(Screen.width * .42f, Screen.height * .72f, Screen.width * .17f, Screen.height * .1f), "Submit"))
-                {
-                    
-                    bool changed = false;
-                    for (j = 0; j < highScores.Length; j++)
-                    {
-
-                        //Get the highScore from 1 - 5
-                        highScoreKey = "HighScore" + (j + 1).ToString();
-                        highScore = PlayerPrefs.GetInt(highScoreKey, 0);
-                        userHighScoreKey = "HighScoreUser" + (j + 1).ToString();
-
-                        if (score > highScore)
-                        {
-                            int temp = highScore;
-                            string temp2 = PlayerPrefs.GetString("HighScoreUser" + (j+1).ToString(), "");
-                            PlayerPrefs.SetInt(highScoreKey, score);
-                            if (changed)
-                            {
-                                PlayerPrefs.SetString(userHighScoreKey, temp2);
-                            }
-                            else
-                            {
-                                PlayerPrefs.SetString(userHighScoreKey, username);
-                            }
-                            
-                            score = temp;
-                            changed = true;
-                        }
-                    }
-                    showText = false;
-                }
-            }
-            else
-            {
-                for (j = 0; j < highScores.Length; j++)
-                {
-                    highScoreKey = "HighScore" + (j + 1).ToString();
-                    userHighScoreKey = "HighScoreUser" + (j + 1).ToString();
-                    highScore = PlayerPrefs.GetInt(highScoreKey, 0);
-                    highScoreUser = PlayerPrefs.GetString(userHighScoreKey, "");
-                    if (highScore > 0)
-                    {
-                        GUI.Label(new Rect(Screen.width * .42f, Screen.height * (.45f + (.1f * j)), Screen.width * .25f, 40), highScoreUser + " " + highScore.ToString());
-                    }
-
-                    Debug.Log(highScoreUser);
-                    Debug.Log(highScore);
-                }
-            }
-
-            
-        }
-    }
 
     void Start ()
 	{
@@ -196,7 +114,6 @@ public class Done_GameController : MonoBehaviour
         }
 		if (restart)
 		{
-
 			if (Input.GetKeyDown (KeyCode.R))
 			{
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
@@ -313,6 +230,5 @@ public class Done_GameController : MonoBehaviour
         Destroy(player);
 		gameOverText.text = "Game Over!";
 		gameOver = true;
-
 	}
 }
