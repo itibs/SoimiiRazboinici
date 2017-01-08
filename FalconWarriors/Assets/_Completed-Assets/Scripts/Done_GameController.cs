@@ -207,7 +207,7 @@ public class Done_GameController : MonoBehaviour
 	IEnumerator SpawnWaves ()
 	{
 		yield return new WaitForSeconds (startWait);
-
+	
 		while (true)
 		{
             waveNo += 1;
@@ -229,8 +229,11 @@ public class Done_GameController : MonoBehaviour
                 if (waveNo > maxWordLength)
                 {
 					//iterative application of animations on text
-                    typeScript.showMirror();
-					typeScript.ZoomInOut ();
+                    //typeScript.showMirror();
+
+					typeScript.flag_zoom = true;
+					System.Console.WriteLine  ("typescript.glag_zoom");
+
                 }
 
                 // set score

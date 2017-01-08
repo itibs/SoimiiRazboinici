@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+
 public class TypeScript : MonoBehaviour {
 
 	private bool isActive = false;
@@ -13,6 +14,11 @@ public class TypeScript : MonoBehaviour {
 
     public TextMesh textMesh;
 
+	public bool flag_zoom;
+	public bool flag_color;
+	public bool flag_tran;
+
+	public float color_count;
 
     void Awake()
     {
@@ -23,7 +29,11 @@ public class TypeScript : MonoBehaviour {
 	void Start () {
         textMesh.text = orig_text;
 		count = 0;
+		color_count = 0;
 		direction = true;
+		flag_zoom = true;
+		flag_color = true;
+		flag_tran = true;
     }
 
     private bool letterPressed(char c)
@@ -57,6 +67,35 @@ public class TypeScript : MonoBehaviour {
 			direction = true;
 		textMesh.fontSize = count;
 	}
+
+	public void Color_change ()
+	{
+		//Random random = new Random();
+
+		//if (direction  && color_count<1.0f)
+			color_count = color_count + 0.1f;
+		
+		//if (!direction && color_count > 0.0f)
+		//	color_count = color_count - 0.01f;
+		
+
+		textMesh.color = new Color (
+			Mathf.Cos(color_count),
+			Mathf.Sin(color_count),
+			Mathf.Sin(color_count));
+		if(flag_tran)
+			textMesh.color = new Color (
+				Mathf.Cos(color_count),
+				Mathf.Sin(color_count),
+				Mathf.Sin(color_count),
+				Mathf.Sin(color_count));
+
+
+	}
+
+
+
+
 	// Update is called once per frame
 	void Update () {
         //if (!isActive)
@@ -64,8 +103,11 @@ public class TypeScript : MonoBehaviour {
         //    setActive(true);
         //}
 	
-		ZoomInOut ();
-
+		//if(flag_zoom==true)
+		//	ZoomInOut ();
+		if (flag_color == true)
+			Color_change ();
+		
         if (isActive == false)
         {
             return;
