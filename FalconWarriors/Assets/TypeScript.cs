@@ -8,32 +8,27 @@ public class TypeScript : MonoBehaviour {
 
     public string orig_text;
 
-	public int count;
+	public int count = 0;
 
-	public bool direction;
+	public bool direction = false;
 
     public TextMesh textMesh;
 
-	public bool flag_zoom;
-	public bool flag_color;
-	public bool flag_tran;
+	public bool flag_zoom = false;
+	public bool flag_color = false;
+	public bool flag_tran = false;
 
-	public float color_count;
+	public float color_count = 0;
 
     void Awake()
     {
         textMesh = GetComponent<TextMesh>();
+        
     }
 
 	// Use this for initialization
 	void Start () {
         textMesh.text = orig_text;
-		count = 0;
-		color_count = 0;
-		direction = true;
-		flag_zoom = true;
-		flag_color = true;
-		flag_tran = true;
     }
 
     private bool letterPressed(char c)
@@ -102,10 +97,10 @@ public class TypeScript : MonoBehaviour {
         //{
         //    setActive(true);
         //}
-	
-		//if(flag_zoom==true)
-		//	ZoomInOut ();
-		if (flag_color == true)
+
+        if (flag_zoom == true)
+            ZoomInOut();
+        if (flag_color == true)
 			Color_change ();
 		
         if (isActive == false)

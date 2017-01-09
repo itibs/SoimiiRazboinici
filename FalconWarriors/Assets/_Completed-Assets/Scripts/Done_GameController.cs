@@ -219,21 +219,32 @@ public class Done_GameController : MonoBehaviour
 				Quaternion spawnRotation = Quaternion.identity;
 				hazard = (GameObject) Instantiate (hazard, spawnPosition, spawnRotation);
 
+                Done_Mover mover = hazard.GetComponent<Done_Mover>();
+                mover.speed = -1.75f - (1.5f * waveNo / 50.0f);
+
                 // set text
                 TypeScript typeScript = hazard.GetComponentInChildren<TypeScript>();
+                
                 int wordLength = (waveNo - 1) % maxWordLength + 2;
                 int cnt = words[wordLength].Count;
                 typeScript.orig_text = words[wordLength][i % cnt];
 
 
-                if (waveNo > maxWordLength)
+                if ((waveNo / maxWordLength) % 4 == 1)
                 {
-					//iterative application of animations on text
-                    //typeScript.showMirror();
-
 					typeScript.flag_zoom = true;
-					System.Console.WriteLine  ("typescript.glag_zoom");
-
+                    typeScript.GetComponent<RotateAsteroid>().enabled = true;
+                }
+                if ((waveNo / maxWordLength) % 4 == 2)
+                {
+                    typeScript.flag_color = true;
+                    typeScript.flag_tran = true;
+                }
+                if ((waveNo / maxWordLength) % 4 == 3)
+                {
+                    typeScript.showMirror();
+                    typeScript.flag_color = true;
+                    typeScript.flag_tran = true;
                 }
 
                 // set score
@@ -259,7 +270,7 @@ public class Done_GameController : MonoBehaviour
     {
         words = new Dictionary<int, List<string>>();
         string line;
-        for (int i = 1; i <= 15; ++i)
+        for (int i = 1; i <= 22; ++i)
         {
             words.Add(i, new List<string>());
             StreamReader sr = new StreamReader("Assets/Files/" + i + ".txt");
@@ -270,7 +281,10 @@ public class Done_GameController : MonoBehaviour
                     line = sr.ReadLine();
                     if (line != null)
                     {
-                        words[i].Add(line);
+                        if (!words[i].Contains(line))
+                        {
+                            words[i].Add(line);
+                        }
                     }
                 } while (line != null);
             }
